@@ -1,8 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack -H 192.168.0.136",
-    "dev1": "next dev --turbopack -H 192.168.30.126",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
