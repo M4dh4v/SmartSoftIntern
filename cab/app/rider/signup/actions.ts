@@ -4,13 +4,13 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function addUser(name:String,
     phoneNumber: Number,
-                                email: String, password: String,
-                                address: String, city: String, pincode: Number,
-                                onRide: Boolean,
-                                ) {
+    email: String, password: String,
+    address: String, city: String, pincode: Number,
+    onRide: Boolean,vehicleType:String, DrivingLicenceNo:String, VehicleNo:String
+    ) {
   const supabase = await createClient();
   const {error } = await supabase
-    .from("users")
+    .from("riders")
     .insert({name:name,
         phoneNumber:phoneNumber,
         email:email,

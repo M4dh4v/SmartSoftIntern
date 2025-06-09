@@ -1,26 +1,23 @@
-'use client';
+
+            
+            'use client';
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { checkUser } from "./actions";
 import Image from "next/image";
-import logo from "@/app/public/logo.png"; // Ensure this logo exists in /public
+import logo from "@/app/public/logo.png"; // Make sure to rename the image and place in /public
 
 export default function PhoneForm() {
   const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e : any) => {
     e.preventDefault();
     const phoneNumber = Number(phone);
+
     if (isNaN(phoneNumber) || phone.length !== 10) {
       console.error("Invalid phone number");
-      return;
-    }
-
-    if (!password) {
-      console.error("Password is required");
       return;
     }
 
@@ -36,23 +33,20 @@ export default function PhoneForm() {
     }
 
     console.log("Phone number submitted:", phone);
-    console.log("Password submitted:", password);
   };
 
   return (
     <div className="min-h-screen flex">
       {/* Left Branding Panel */}
       <div className="w-1/2 bg-[#fff4e6] px-12 py-16 flex flex-col justify-center gap-8">
-      <div className="justify-center flex">
         <Image
           src={logo}
           alt="Cabsy Logo"
-          className="w-45 h-auto"
+          className="w-70 h-auto"
           priority
         />
-        </div>
-        <h1 className="text-3xl font-bold text-center text-[#bf360c]">Pin 2 Pin Cab Booking</h1>
-        <ul className="text-[#4e342e] text-base text-center leading-relaxed">
+        <h1 className="text-3xl font-bold text-[#bf360c]">Pin 2 Pin Cab Booking</h1>
+        <ul className="text-[#4e342e] text-base leading-relaxed">
           <li>🚕 Affordable rides across your city</li>
           <li>📍 Instant location tracking by pincode</li>
           <li>🕒 24x7 Reliable service</li>
@@ -69,7 +63,6 @@ export default function PhoneForm() {
           <h1 className="text-2xl font-bold text-center">User Login</h1>
           <h2 className="text-lg font-medium text-center text-zinc-300">Phone Verification</h2>
 
-          {/* Phone Number Input */}
           <Input
             type="tel"
             inputMode="numeric"
@@ -78,16 +71,6 @@ export default function PhoneForm() {
             placeholder="Enter 10-digit phone number"
             value={phone}
             onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-            required
-            className="bg-black text-white border border-zinc-500 placeholder-zinc-500 focus:ring-2 focus:ring-white focus:outline-none rounded-xl px-4 py-2"
-          />
-
-          {/* Password Input */}
-          <Input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             required
             className="bg-black text-white border border-zinc-500 placeholder-zinc-500 focus:ring-2 focus:ring-white focus:outline-none rounded-xl px-4 py-2"
           />
