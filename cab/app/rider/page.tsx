@@ -1,6 +1,6 @@
 
             
-            'use client';
+'use client';
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,7 @@ import logo from "@/app/public/logo.png"; // Make sure to rename the image and p
 export default function PhoneForm() {
   const [phone, setPhone] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e : any) => {
     e.preventDefault();
     const phoneNumber = Number(phone);
 
