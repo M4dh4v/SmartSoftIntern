@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { checkUser } from "./actions";
 import Image from "next/image";
-import logo from "@/app/public/logo.png"; // Ensure this logo exists in /public
+import logo from "@/app/public/logow.png"; // Ensure this logo exists in /public
 
 export default function PhoneForm() {
   const [phone, setPhone] = useState("");

@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function checkUser(phoneNumber: number) {
   const supabase = await createClient();
   const { data, status, error } = await supabase
-    .from("users")
+    .from("user")
     .select()
     .eq("phoneNumber", phoneNumber);
 
