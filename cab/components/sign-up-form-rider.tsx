@@ -23,7 +23,10 @@ export interface SignUpFormData {
 }
 
 interface SignUpFormProps {
-  onSubmit: (formData: SignUpFormData) => Promise<string>;
+  onSubmit: (formData: SignUpFormData) => Promise<{
+    success: boolean;
+    message: string;
+  }>;
 }
 
 export default function SignUpForm({ onSubmit }: SignUpFormProps) {
@@ -39,7 +42,7 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
     pincode: "",
     vehicleType: "",
     DrivingLicenceNo: "",
-    VehicleNo: ""
+    VehicleNo: "",
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -74,11 +77,14 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
 
     setIsLoading(true);
     try {
-      const message = await onSubmit(formData);
-      console.log(message);
-      router.push("/user/sign-up-success");
+      const result = await onSubmit(formData);
+      if (result.success) {
+        router.push("/rider/sign-up-success");
+      } else {
+        setError(result.message || "Failed to create rider account");
+      }
     } catch (err: any) {
-      setError(err.message || "An error occurred");
+      setError(err.message || "An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -104,7 +110,7 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
           onSubmit={handleSubmit}
           className="bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl p-8 w-full max-w-md flex flex-col gap-4 transition-all duration-300"
         >
-          <h1 className="text-2xl font-bold text-center">User / Rider Signup</h1>
+          <h1 className="text-2xl font-bold text-center">Rider Signup</h1>
 
           <Input name="name" type="text" placeholder="Name" value={formData.name} onChange={handleChange} required />
           <Input
@@ -131,7 +137,8 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
             name="vehicleType"
             value={formData.vehicleType}
             onChange={handleChange}
-            className="bg-black text-white border border-zinc-500 rounded-xl px-4 py-2"
+            required
+            className="w-full px-3 py-2 border border-zinc-200 rounded-md focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500"
           >
             <option value="">Select Vehicle Type</option>
             <option value="sedan-4">Sedan - 4 Seater</option>
@@ -140,8 +147,25 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
             <option value="premium-7">Premium - 7 Seater</option>
           </select>
 
-          <Input name="DrivingLicenceNo" type="text" placeholder="Driving Licence Number" value={formData.DrivingLicenceNo} onChange={handleChange} />
-          <Input name="VehicleNo" type="text" placeholder="Vehicle Number" value={formData.VehicleNo} onChange={handleChange} />
+          <Input
+            name="DrivingLicenceNo"
+            type="text"
+            placeholder="Driving Licence Number"
+            value={formData.DrivingLicenceNo}
+            onChange={handleChange}
+            required
+           
+          />
+
+          <Input
+            name="VehicleNo"
+            type="text"
+            placeholder="Vehicle Number"
+            value={formData.VehicleNo}
+            onChange={handleChange}
+            required
+           
+          />
 
           <Button
             type="submit"

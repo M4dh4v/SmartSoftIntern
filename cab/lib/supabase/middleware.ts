@@ -46,6 +46,12 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (
+    ![
+      '/user/sign-up',
+      '/rider/sign-up',
+      '/user/sign-up-success',
+      '/rider/sign-up-success'
+    ].includes(request.nextUrl.pathname) &&
     request.nextUrl.pathname !== "/" &&
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&
