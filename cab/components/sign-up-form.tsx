@@ -61,12 +61,29 @@ export function SignUpForm({ onSubmit, className }: SignUpFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (
-      isNaN(Number(formData.phoneNumber)) ||
-      formData.phoneNumber.length !== 10 ||
-      isNaN(Number(formData.pincode))
-    ) {
-      toast.error('Invalid phone number or pincode');
+    // Client-side validation
+    if (!formData.name || formData.name.trim().length < 2) {
+      toast.error('Name must be at least 2 characters long');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      toast.error('Password must be at least 8 characters long');
+      return;
+    }
+
+    if (!/^[0-9]{10}$/.test(formData.phoneNumber)) {
+      toast.error('Please enter a valid 10-digit phone number');
+      return;
+    }
+
+    if (!/^[0-9]{6}$/.test(formData.pincode)) {
+      toast.error('Please enter a valid 6-digit pincode');
       return;
     }
 
@@ -75,22 +92,30 @@ export function SignUpForm({ onSubmit, className }: SignUpFormProps) {
       return;
     }
 
-    setIsLoading(true);
-    try {
-      const result = await onSubmit(formData);
-      setIsLoading(false);
+    if (!formData.address || formData.address.trim().length < 5) {
+      toast.error('Please enter a valid address');
+      return;
+    }
 
-      if (result.success) {
-        toast.success(result.message);
-        setTimeout(() => {
-          router.push('/user/sign-up-success');
-        }, 1000);
-      } else {
-        toast.error(result.message);
+    if (!formData.city || formData.city.trim().length < 2) {
+      toast.error('Please enter a valid city name');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const result = await onSubmit(formData);
+      
+      // The success/error handling is now done in the page component
+      if (!result.success) {
+        // If we get here, it means the API call succeeded but returned success: false
+        toast.error(result.message || 'Failed to create account');
       }
     } catch (error: any) {
+      console.error('Form submission error:', error);
+      toast.error(error.message || 'An error occurred while submitting the form');
+    } finally {
       setIsLoading(false);
-      toast.error(error.message || 'An unexpected error occurred');
     }
   };
 
@@ -123,8 +148,22 @@ export function SignUpForm({ onSubmit, className }: SignUpFormProps) {
           <Input name="city" placeholder="City" value={formData.city} onChange={handleChange} required />
           <Input name="pincode" placeholder="Pincode" value={formData.pincode} onChange={handleChange} required />
 
-          <Button type="submit" disabled={isLoading} className="bg-white text-black font-semibold py-2 rounded-xl hover:bg-zinc-200 transition duration-200">
-            {isLoading ? 'Signing up...' : 'Sign Up'}
+          <Button 
+            type="submit" 
+            disabled={isLoading} 
+            className={`w-full bg-white text-black font-semibold py-2 rounded-xl hover:bg-zinc-200 transition duration-200 ${
+              isLoading ? 'opacity-70 cursor-not-allowed' : ''
+            }`}
+          >
+            {isLoading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Creating Account...
+              </span>
+            ) : 'Sign Up'}
           </Button>
 
           <div className="mt-4 text-center text-sm text-zinc-400">

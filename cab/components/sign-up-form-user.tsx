@@ -73,7 +73,7 @@ export function SignUpForm({ onSubmit, className }: SignUpFormProps) {
     if (message.toLowerCase().includes('success')) {
       toast.success(message);
       setTimeout(() => {
-        router.push('/user/sign-up-success');
+        router.push('/rider/sign-up-success');
       }, 1000); // Delay to allow toast to show
     } else {
       toast.error(message);

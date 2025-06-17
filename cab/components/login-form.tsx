@@ -13,8 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
+import {decideUser} from "@/app/actions";
 
 export function LoginForm({
   className,
@@ -33,13 +34,14 @@ export function LoginForm({
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
+      // Sign in with email and password
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+console.log(`User signed in ${data.user?.id}`);
+
+const newloc = await decideUser(data.user?.id); // assume decideUser is async
+router.push(newloc.toString());
+
+      
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {

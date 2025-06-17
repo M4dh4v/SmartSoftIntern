@@ -64,6 +64,7 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
 
     const phoneNumber = Number(formData.phoneNumber);
     const pincode = Number(formData.pincode);
+    const vehicleTypeNum = Number(formData.vehicleType);
 
     if (isNaN(phoneNumber) || formData.phoneNumber.length !== 10 || isNaN(pincode)) {
       setError("Invalid phone number or pincode");
@@ -77,7 +78,7 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
 
     setIsLoading(true);
     try {
-      const result = await onSubmit(formData);
+      const result = await onSubmit({ ...formData, vehicleType: vehicleTypeNum.toString() });
       if (result.success) {
         router.push("/rider/sign-up-success");
       } else {
@@ -141,10 +142,10 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
             className="w-full px-3 py-2 border border-zinc-200 rounded-md focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500"
           >
             <option value="">Select Vehicle Type</option>
-            <option value="sedan-4">Sedan - 4 Seater</option>
-            <option value="suv-7">SUV - 7 Seater</option>
-            <option value="premium-4">Premium - 4 Seater</option>
-            <option value="premium-7">Premium - 7 Seater</option>
+            <option value="1">Sedan - 4 Seater</option>
+            <option value="2">SUV - 7 Seater</option>
+            <option value="3">Premium - 4 Seater</option>
+            <option value="4">Premium - 7 Seater</option>
           </select>
 
           <Input
