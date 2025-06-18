@@ -7,8 +7,26 @@ import { ConnectSupabaseSteps } from "@/components/tutorial/connect-supabase-ste
 import { SignUpUserSteps } from "@/components/tutorial/sign-up-user-steps";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+
+  const supabase = await createClient()
+  const {data,error} = await supabase.auth.getUser()
+  if (data?.user?.user_metadata.role == "user")
+  {
+    return redirect("/user/dashboard")
+  }
+  else if (data?.user?.user_metadata.role == "rider")
+  {
+    return redirect("/rider/dashboard")
+  }
+  else if (data?.user?.user_metadata.role != "admin")
+  {
+    return redirect("/corrupt-account")
+  }
+
   return (
     <main className="min-h-screen flex flex-col items-center">
       <div className="flex-1 w-full flex flex-col gap-20 items-center">

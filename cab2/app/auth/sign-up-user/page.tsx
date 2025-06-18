@@ -1,9 +1,12 @@
-import { SignUpFormUser} from "@/components/sign-up-form-user";
+import { SignUpFormUser } from "@/components/sign-up-form-user";
+import { verifyNotSignedIn } from "../actions";
 
-export default function Page() {
+export default async function Page() {
+      // await verifyNotSignedIn()
+  
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
+    <div className="flex h-screen w-screen items-center justify-center">
+      <div className="w-full h-full">
         <SignUpFormUser />
       </div>
     </div>
