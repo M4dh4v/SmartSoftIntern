@@ -32,6 +32,13 @@ export interface RiderSignUpData {
   VehicleNo: string;
 }
 
+const vh: Record<string, number>={
+  "Sedan - 4 Seater" : 1,
+  "SUV - 7 Seater":2,
+  "Premium - 4 Seater":3,
+  "Premium - 7 Seater":4
+}
+
 export function SignUpFormRider({
   className,
   ...props
@@ -109,19 +116,22 @@ export function SignUpFormRider({
       const uid = authData.user?.id;
       if (!uid) throw new Error("No user ID returned after sign-up");
 
+      const vehid : number=vh[vehicleType]
       const { error: dbError } = await supabase.from("rider").insert({
         id: uid,
         name,
         phoneNumber,
-        email,
+        vehicleType: vehid,
+        vehicleNumber:VehicleNo ,
         address,
         pincode,
-        vehicleType,
-        DrivingLicenceNo,
-        VehicleNo,
+        DLno: DrivingLicenceNo,
       });
+      console.log(dbError)
 
-      if (dbError) {
+      const {data: sdata, error:serror} = await supabase.from('rider').select().eq('id',uid)
+
+      if (dbError || !sdata || serror) {
         const supabaseAdmin = await createAdminClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.SUPABASE_SERVICE_ROLE_KEY!

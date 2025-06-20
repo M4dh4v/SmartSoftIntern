@@ -19,3 +19,13 @@ export async function getAllUsers() {
     }
     return data
 }
+
+export async function getNonValidRiders() {
+    const supabase  = await createClient()
+    const {data , error} = await supabase.from('rider').select('id').eq('valid',false)
+    if (error){
+        return error
+    }
+    // console.log(data)
+    return data
+}
