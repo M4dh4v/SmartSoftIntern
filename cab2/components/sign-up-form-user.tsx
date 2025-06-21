@@ -95,7 +95,6 @@ export function SignUpFormUser({
       });
 
       console.log("authData, ", authData)
-      if (authError) throw authError;
       const uid: any = authData?.user?.id;
 
       const { error: dbError } = await supabase.from("user").insert({
@@ -107,10 +106,9 @@ export function SignUpFormUser({
         pincode,
       });
 
-      const ddd = await supabase.from('user').select().eq('id',uid)
-      console.log('hit searching for id',ddd)
+      const {data:ddd, error: serror} = await supabase.from('user').select().eq('id',uid)
 
-      if (dbError || !ddd) {
+      if (dbError || !ddd || serror) {
         const supabaseAdmin = createAdminClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.SUPABASE_SERVICE_ROLE_KEY!
