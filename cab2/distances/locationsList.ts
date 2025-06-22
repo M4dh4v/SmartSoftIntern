@@ -1,0 +1,31 @@
+export default function locationsList(){
+    const locations = [
+        { location: "Hitec City", pincode: "500084" },
+        { location: "Gachibowli", pincode: "500032" },
+        { location: "Nanakramguda", pincode: "500032" },
+        { location: "Ameerpet", pincode: "500038" },
+        { location: "Panjagutta", pincode: "500082" },
+        { location: "Begumpet", pincode: "500016" },
+        { location: "Sanath Nagar", pincode: "500018" },
+        { location: "Rasoolpura", pincode: "500003" },
+        { location: "Prakash Nagar", pincode: "500016" },
+        { location: "RTC X Roads", pincode: "500020" },
+        { location: "Secunderabad", pincode: "500007" },
+        { location: "Chikkadpally", pincode: "500020" },
+        { location: "Irrum Manzil", pincode: "500004" },
+        { location: "Miyapur", pincode: "500049" },
+        { location: "Kukatpally", pincode: "500072" },
+        { location: "Nampally", pincode: "500001" },
+        { location: "Narayanaguda", pincode: "500029" },
+        { location: "Parade Ground", pincode: "500003" },
+        { location: "Malakpet", pincode: "500036" },
+        { location: "Dilsukhnagar", pincode: "500060" },
+        { location: "L B Nagar", pincode: "500074" },
+        { location: "Nagole", pincode: "500035" },
+        { location: "Uppal", pincode: "500051" },
+        { location: "Madhapur", pincode: "500081" },
+        { location: "KPHB", pincode: "500072" },
+        ];
+
+    return locations
+}

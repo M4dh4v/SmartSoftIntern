@@ -13,7 +13,7 @@ export async function AuthButton() {
   const role: string = (user?.user_metadata.role)
   const uid = user?.id
   const {data: namedata, error}= await supabase.from(role).select('name').eq('id',uid).single()
-  const name : string = namedata?.name || "User"
+  const name : string = namedata?.name || "Admin"
 
   return user ? (
     <div className="flex items-center gap-4">

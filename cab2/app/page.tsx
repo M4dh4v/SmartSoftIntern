@@ -14,18 +14,18 @@ export default async function Home() {
 
   const supabase = await createClient()
   const {data,error} = await supabase.auth.getUser()
-  if (data?.user?.user_metadata.role == "user")
-  {
-    return redirect("/user/dashboard")
-  }
-  else if (data?.user?.user_metadata.role == "rider")
-  {
-    return redirect("/rider/dashboard")
-  }
-  else if (data?.user?.user_metadata.role != "admin")
-  {
-    return redirect("/corrupt-account")
-  }
+  // if (data?.user?.user_metadata.role == "user")
+  // {
+  //   return redirect("/user/dashboard")
+  // }
+  // else if (data?.user?.user_metadata.role == "rider")
+  // {
+  //   return redirect("/rider/dashboard")
+  // }
+  // if (data?.user?.user_metadata.role != "admin")
+  // {
+  //   return redirect("/corrupt-account")
+  // }
 
   return (
     <main className="min-h-screen flex flex-col items-center">

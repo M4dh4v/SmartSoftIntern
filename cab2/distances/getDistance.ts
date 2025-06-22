@@ -1,36 +1,12 @@
+'use client'
 import fs from "fs";
 import Papa from "papaparse";
+import locationsList from "./locationsList";
 
 
-export default function distance(loc1:string, loc2:string )
+export async function distance(loc1:string, loc2:string )
 {
-    const locations = [
-    { location: "Hitec City", pincode: "500081" },
-    { location: "Gachibowli", pincode: "500032" },
-    { location: "Nanakramguda", pincode: "500032" },
-    { location: "Ameerpet", pincode: "500038" },
-    { location: "Panjagutta", pincode: "500082" },
-    { location: "Begumpet", pincode: "500016" },
-    { location: "Sanath Nagar", pincode: "500018" },
-    { location: "Rasoolpura", pincode: "500003" },
-    { location: "Prakash Nagar", pincode: "500016" },
-    { location: "RTC X Roads", pincode: "500020" },
-    { location: "Secunderabad", pincode: "500007" },
-    { location: "Chikkadpally", pincode: "500020" },
-    { location: "Irrum Manzil", pincode: "500004" },
-    { location: "Miyapur", pincode: "500049" },
-    { location: "Kukatpally", pincode: "500072" },
-    { location: "Nampally", pincode: "500001" },
-    { location: "Narayanaguda", pincode: "500029" },
-    { location: "Parade Ground", pincode: "500003" },
-    { location: "Malakpet", pincode: "500036" },
-    { location: "Dilsukhnagar", pincode: "500060" },
-    { location: "L B Nagar", pincode: "500074" },
-    { location: "Nagole", pincode: "500035" },
-    { location: "Uppal", pincode: "500051" },
-    { location: "Madhapur", pincode: "500081" },
-    { location: "KPHB", pincode: "500072" },
-    ];
+    const locations=locationsList()
 
     // Function 1: Get pincode from location
     function getPincodeFromLocation(location: string) {
@@ -43,18 +19,18 @@ export default function distance(loc1:string, loc2:string )
     return locations.findIndex((loc) => loc.pincode === pincode);
     }
 
-    
-    const l1 = getIndexFromPincode(getPincodeFromLocation(loc1) ?? "");
-    const l2 = getIndexFromPincode(getPincodeFromLocation(loc2) ?? "");
+    const l1 = getIndexFromPincode(loc1.toString());
+    const l2 = getIndexFromPincode((loc2).toString());
 
 
-    const file = fs.readFileSync("locations.csv", "utf8");
-
-    const result : any = Papa.parse(file, {
+     const response = await fetch("/locations.csv");
+    const csvText = await response.text();
+  // Parse CSV
+  const result: any = Papa.parse(csvText, {
     header: false,
     dynamicTyping: true,
-    }); 
-
+  });
+  console.log('1',l1,'\tl2:',l2,loc2,'\t',result)
 
     return(result.data[l1][l2]);
 

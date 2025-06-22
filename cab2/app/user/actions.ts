@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import distance from "@/distances/getDistance";
+import {distance} from "@/distances/getDistance";
 
 
 export async function verifyUser() {
@@ -21,7 +21,7 @@ export async function verifyUser() {
 }
 
 export async function makeNewRide(from:string | number, to: string | number, vtype: number){
-    const d= distance(from.toString(),to.toString())
+    const d: number = parseFloat((await distance(from.toString(), to.toString()) ?? "0").toString());
     const price = 69 + (d*vtype)
     const supabase = await createClient()
     const {data:udata, error:uerror} = await supabase.auth.getUser()
@@ -38,7 +38,7 @@ export async function makeNewRide(from:string | number, to: string | number, vty
         user: uid,
         from,
         to,
-        distance: parseFloat(d),
+        distance: d,
         price,
         vehicleType: vtype
     })
