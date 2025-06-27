@@ -233,7 +233,7 @@ export function SignUpFormRider({
               </Button>
 
               <div className="text-center text-sm">
-                Already have an account? <Link href="/rider/login" className="underline underline-offset-4">Login</Link>
+                Already have an account? <Link href="/auth/login" className="underline underline-offset-4">Login</Link>
               </div>
             </form>
           </CardContent>

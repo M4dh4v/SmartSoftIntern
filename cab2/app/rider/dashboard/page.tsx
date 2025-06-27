@@ -1,10 +1,13 @@
-// "use client";
-import {checkValid, checkAccept} from "../actions";
+// app/rider/dashboard/page.tsx
+import RiderDashboard from "@/components/riderDashboard";
+import { checkValid, checkAccept, getAllActiveRides } from "../actions";
 
+export default async function RiderDashboardPage() {
+  await checkValid();
+  await checkAccept();
 
-export default async function RiderDashboard() {
-  await checkValid()
-  await checkAccept()
-  return<RiderDashboard />;
+  const result = await getAllActiveRides();
+  const rides = result.success ? result.data : [];
 
+  return <RiderDashboard rides={rides} />;
 }

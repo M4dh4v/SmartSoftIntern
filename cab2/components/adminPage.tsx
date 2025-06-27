@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { acceptRider } from "@/app/admin/actions";
 
 export default function AdminPage({ data }: { data: any }) {
   const [users,setUsers] = useState(data?.users || [])
   const [riders, setRiders] = useState(data?.riders || [])
 
 
+  const makeValid = async () => {
+
+  }
   return (
 
       <main className="flex-1 flex flex-col md:flex-row gap-6 px-6 py-10 items-start justify-between">

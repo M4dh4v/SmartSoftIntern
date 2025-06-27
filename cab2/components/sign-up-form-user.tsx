@@ -151,7 +151,7 @@ export function SignUpFormUser({
         <div className="w-1/2 bg-zinc-900 text-white p-10 flex items-center justify-center">
           <Card className="bg-zinc-900 text-white border-none w-full rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-3xl font-bold text-center">Sign up</CardTitle>
+              <CardTitle className="text-3xl font-bold text-center">User Sign up</CardTitle>
               <CardDescription className="text-center text-zinc-400">
                 Create your user account
               </CardDescription>

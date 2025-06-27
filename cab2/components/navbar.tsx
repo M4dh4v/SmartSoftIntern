@@ -1,25 +1,33 @@
-import Link from "next/link";
-import { DeployButton } from "./deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
-import { AuthButton } from "@/components/auth-button";
-import { hasEnvVars } from "@/lib/utils";
+import Image from "next/image";
 import { ThemeSwitcher } from "./theme-switcher";
+import { LogoutButton } from "./logout-button"; // Import your LogoutButton component
 
+export default function NavBar() {
+  return (
+    <nav className="w-full bg-[#fff8f0] shadow-md border-b border-orange-200">
+      <div className="max-w-6xl mx-auto flex justify-between items-center h-20 px-4 sm:px-6">
+        {/* Logo and Brand Name */}
+        <div className="flex items-center gap-3">
+          <Image
+            src="/logow.png"
+            alt="Cabsy Logo"
+            width={48}
+            height={48}
+            className="rounded-md"
+          />
+          <h1 className="text-xl font-bold text-[#bf360c] tracking-wide">
+            Cabsy
+          </h1>
+        </div>
 
-
-export default function NavBar(){
-    return(
-        <>
-    <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-          <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-            <div className="flex gap-5 items-center font-semibold">
-              <h1>Cabsify</h1>
-            </div>
+        {/* Right-side actions */}
+        <div className="flex items-center gap-4">
           <ThemeSwitcher />
-
-        <AuthButton />          </div>
-        </nav>
-       
-    </>
-    )
+          {/* Use your imported LogoutButton component here */}
+          <LogoutButton />
+          {/* <AuthButton /> // Uncomment if you're using Auth */}
+        </div>
+      </div>
+    </nav>
+  );
 }

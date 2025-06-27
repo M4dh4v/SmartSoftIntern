@@ -33,3 +33,21 @@ export async function checkAccept(){
         return redirect('/rider/admin-approval')
     }
 }
+
+export async function getAllActiveRides() {
+    const supabase = await createClient()
+    const {data: rides, error: rerror} = await supabase.from('rides').select()
+    if (rerror){
+        return {
+            success: false,
+            message: rerror
+        }
+    }
+
+    return{
+        success: true,
+        message: '',
+        data: rides
+    }
+    
+}

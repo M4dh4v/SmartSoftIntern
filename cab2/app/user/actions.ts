@@ -20,39 +20,41 @@ export async function verifyUser() {
     }
 }
 
-export async function makeNewRide(from:string | number, to: string | number, vtype: number){
-    const d: number = parseFloat((await distance(from.toString(), to.toString()) ?? "0").toString());
-    const price = 69 + (d*vtype)
-    const supabase = await createClient()
-    const {data:udata, error:uerror} = await supabase.auth.getUser()
-    if(!udata.user?.id){
-        return {
-            success: false,
-            message: uerror
-        }
-    }
-    const uid = udata.user?.id
+export async function makeNewRide(
+  from: string | number,
+  to: string | number,
+  distance: number,
+  vehicle: string,
+  price: number | null
+) {
 
-    const{error} = await supabase.from('rides')
-    .insert({
-        user: uid,
-        from,
-        to,
-        distance: d,
-        price,
-        vehicleType: vtype
-    })
+  const supabase = await createClient()
+  const { data: udata, error: uerror } = await supabase.auth.getUser()
+  if (uerror || !udata.user?.id) {
+    return { success: false, message: uerror?.message ?? "Not logged in" }
+  }
 
-    if (error)
-    {
-        return{
-            success: false,
-            message: error
-        }
-    }
+  const uid = udata.user.id
 
-    return {
-        success: true,
-        message: "working wow"
-    }
+  // Fix your vtype logic (`=` is assignment; use `===`)
+  let vtype = 0
+  if (vehicle === "Hatchback/Sedan") vtype = 1
+  else if (vehicle === "SUV / 7-Seater") vtype = 2
+  else if (vehicle === "Premium Sedan") vtype = 3
+  else if (vehicle === "Premium SUV") vtype = 4
+
+  const { error: insertError } = await supabase.from("rides").insert({
+    user: uid,
+    from,
+    to,
+    distance,
+    price,
+    vehicleType: vtype,
+  })
+
+  if (insertError) {
+    return { success: false, message: insertError.message }
+  }
+
+  return { success: true, message: "Ride booked successfully" }
 }

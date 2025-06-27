@@ -5,7 +5,8 @@ import NavBar from "@/components/navbar";
 export default async function Page(){
   let data = {
     users: await getAllUsers(),
-    riders: await getAllRiders()
+    riders: await getAllRiders(),
+    waiting : await getNonValidRiders()
   }
   data= JSON.parse(JSON.stringify(data))
 
