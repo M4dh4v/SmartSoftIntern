@@ -15,7 +15,7 @@ export default function FinishedPage() {
 
     if (counter === 0) {
       clearInterval(timer);
-      router.push("/rider/dashboard"); // adjust this path if your dashboard is elsewhere
+      router.push("/user/dashboard"); // adjust this path if your dashboard is elsewhere
     }
 
     return () => clearInterval(timer);

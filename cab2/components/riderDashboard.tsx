@@ -27,16 +27,24 @@ export default function RiderDashboard() {
   const pincodeOptions = locationsList();
   const supabase = createClient();
 
-  // Fetch all rides once on mount
+  const fetchRides = async () => {
+    try {
+      const res = await fetch("/api/rides");
+      const json = await res.json();
+      if (json.success) setAllRides(json.data);
+      else console.error("Error fetching rides:", json.message);
+    } catch (err) {
+      console.error("Network error fetching rides:", err);
+    }
+  };
+
   useEffect(() => {
-    fetch("/api/rides")
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success) setAllRides(json.data);
-        else console.error("Error fetching rides:", json.message);
-      })
-      .catch((err) => console.error("Network error fetching rides:", err));
+    fetchRides();
   }, []);
+
+  const handleRefresh = () => {
+    fetchRides();
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedPincodes(
@@ -58,7 +66,6 @@ export default function RiderDashboard() {
     if (bookingInProgress) return;
     setBookingInProgress(true);
     try {
-      // Get the currently logged-in rider
       const { data: userData, error: userError } = await supabase.auth.getUser();
       if (userError || !userData.user) {
         console.error("Error fetching rider:", userError);
@@ -67,7 +74,6 @@ export default function RiderDashboard() {
       }
       const riderId = userData.user.id;
 
-      // Book the ride with rideId and riderId
       const res = await fetch("/api/book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -86,12 +92,11 @@ export default function RiderDashboard() {
     }
   };
 
-  // Only include rides that are neither active nor finished
   const filteredRides = allRides.filter(
-    (ride) => !ride.active && !ride.finished
+    (ride) => (!ride.active && !ride.finished)
   );
+  // console.log(filteredRides)
 
-  // Then apply pincode preferences
   const available = filteredRides.filter((ride) =>
     savedPincodes.length > 0
       ? savedPincodes.includes(ride.from) || savedPincodes.includes(ride.to)
@@ -174,9 +179,17 @@ export default function RiderDashboard() {
           </div>
 
           <div className="bg-white rounded-2xl p-6 shadow-md">
-            <h2 className="text-xl font-semibold text-[#bf360c] mb-4">
-              Available Bookings
-            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-[#bf360c]">
+                Available Bookings
+              </h2>
+              <button
+                onClick={handleRefresh}
+                className="text-sm px-3 py-1 bg-[#bf360c] text-white rounded-md hover:bg-[#a33109]"
+              >
+                🔄 Refresh
+              </button>
+            </div>
 
             {available.length === 0 ? (
               <p className="text-gray-500 italic text-sm">

@@ -7,7 +7,7 @@ export async function GET() {
     const supabase = await createClient();
     const { data: rides, error } = await supabase
       .from("rides")
-      .select("id, user, from, to, distance, price, vehicleType");
+      .select();
 
     if (error) {
       return NextResponse.json(

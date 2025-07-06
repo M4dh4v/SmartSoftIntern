@@ -1,54 +1,84 @@
 // app/user/booking/[bookingid]/page.tsx
+"use client";
+
 import locationsList from "@/distances/locationsList";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 
-interface Props {
-  params: { bookingid: string };
-}
 
-export default async function BookingPage({ params }: {params: Promise<{bookingid: string}>}) {
-  const supabase = await createClient();
+export default function BookingPage() {
+  const { bookingid } = useParams();
+  const [ride, setRide] = useState<any>(null);
+  const [rider, setRider] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
   const locations = locationsList();
-  const {bookingid} = await params;
+  const router = useRouter();
+  const supabase = createClient();
 
-  // 1) Load the ride
-  const { data: ride, error: rideErr } = await supabase
-    .from("rides")
-    .select()
-    .eq("id", bookingid)
-    .single();
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: rideData, error: rideErr } = await supabase
+        .from("rides")
+        .select()
+        .eq("id", bookingid)
+        .single();
 
-  if (rideErr || !ride) {
-    return (
-      <div className="max-w-md mx-auto mt-16 p-6 bg-red-50 border border-red-300 rounded-lg shadow-md">
-        <p className="text-center text-red-800 font-semibold">
-          Failed to load booking #{bookingid}: {rideErr?.message}
-        </p>
-      </div>
-    );
-  }
+      if (rideErr || !rideData) {
+        setError(`Failed to load booking #${bookingid}: ${rideErr?.message}`);
+        return;
+      }
 
-  // 2) Load the rider
-  const { data: rider, error: riderErr } = await supabase
-    .from("rider")
-    .select()
-    .eq("id", ride.rider)
-    .single();
+      setRide(rideData);
 
-  if (riderErr || !rider) {
-    return (
-      <div className="max-w-md mx-auto mt-16 p-6 bg-red-50 border border-red-300 rounded-lg shadow-md">
-        <p className="text-center text-red-800 font-semibold">
-          Failed to load rider details: {riderErr?.message}
-        </p>
-      </div>
-    );
-  }
+      const { data: riderData, error: riderErr } = await supabase
+        .from("rider")
+        .select()
+        .eq("id", rideData.rider)
+        .single();
 
-  // Helper to get name from pincode
+      if (riderErr || !riderData) {
+        setError(`Failed to load rider details: ${riderErr?.message}`);
+        return;
+      }
+
+      setRider(riderData);
+    };
+
+    fetchData();
+  }, [bookingid, supabase]);
+
+  // Check if ride is finished every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const { data, error } = await supabase
+        .from("rides")
+        .select("finished")
+        .eq("id", bookingid)
+        .single();
+
+      if (data?.finished) {
+        clearInterval(interval);
+        router.push("/user/finish");
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [bookingid, router, supabase]);
+
   const getLocationName = (pincode: string) => {
-    return locations.find(loc => loc.pincode === pincode)?.location || pincode;
+    return locations.find((loc) => loc.pincode === pincode)?.location || pincode;
   };
+
+  if (error) {
+    return (
+      <div className="max-w-md mx-auto mt-16 p-6 bg-red-50 border border-red-300 rounded-lg shadow-md">
+        <p className="text-center text-red-800 font-semibold">{error}</p>
+      </div>
+    );
+  }
+
+  if (!ride || !rider) return null;
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-12 px-4">
@@ -61,7 +91,9 @@ export default async function BookingPage({ params }: {params: Promise<{bookingi
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Ride Info */}
             <div className="bg-gray-50 dark:bg-gray-700 rounded-2xl p-6">
-              <h2 className="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">🚗 Ride Info</h2>
+              <h2 className="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">
+                🚗 Ride Info
+              </h2>
               <dl className="space-y-3 text-gray-800 dark:text-gray-200">
                 <div className="flex justify-between">
                   <dt className="font-medium">From</dt>
@@ -114,7 +146,9 @@ export default async function BookingPage({ params }: {params: Promise<{bookingi
 
             {/* Rider Info */}
             <div className="bg-gray-50 dark:bg-gray-700 rounded-2xl p-6">
-              <h2 className="text-2xl font-bold mb-4 text-green-600 dark:text-green-400">👶 Rider Info</h2>
+              <h2 className="text-2xl font-bold mb-4 text-green-600 dark:text-green-400">
+                👶 Rider Info
+              </h2>
               <dl className="space-y-3 text-gray-800 dark:text-gray-200">
                 <div className="flex justify-between">
                   <dt className="font-medium">Name</dt>

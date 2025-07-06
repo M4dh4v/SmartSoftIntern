@@ -11,6 +11,10 @@ export function FinishRideButton({ rideId }: FinishProps) {
 
   const handleFinish = async () => {
     setLoading(true);
+    const {data: rider, error: e} = await supabase.auth.getUser()
+    const {data:ride, error: e2} = await supabase.from('rides').select('rider').eq('id',rideId).single()
+    if(rider?.user?.id == ride?.rider)
+    {
     const { error } = await supabase
       .from("rides")
       .update({ finished: true })
@@ -22,6 +26,11 @@ export function FinishRideButton({ rideId }: FinishProps) {
       router.push("/rider/finish");
     }
     setLoading(false);
+    }
+    else{
+      router.push('/corrupt-account')
+    }
+    
   };
 
   return (

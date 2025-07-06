@@ -126,10 +126,10 @@ export default function UserDashboard() {
               onChange={(e) => setTo(e.target.value)}
               required
               disabled={!from}
-              className={`w-full border rounded px-4 py-2 ${!from ? 'bg-gray-100 cursor-not-allowed' : 'text-white'}`}
+              className={`w-full border rounded px-4 py-2 ${!from ? "bg-gray-100 cursor-not-allowed" : "text-white"}`}
             >
               <option value="">
-                {from ? 'Select drop-off location' : 'Select pickup first'}
+                {from ? "Select drop-off location" : "Select pickup first"}
               </option>
               {pincodeOptions
                 .filter(({ pincode }) => pincode !== from)
@@ -170,7 +170,12 @@ export default function UserDashboard() {
             {/* Submit */}
             <button
               type="submit"
-              disabled={submitting}
+              disabled={
+                submitting ||
+                !from ||
+                !to ||
+                vehicleRate === 0
+              }
               className={`w-full bg-[#ff9800] hover:bg-[#fb8c00] text-white font-semibold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               {submitting ? "Booking..." : "Ride now"}
