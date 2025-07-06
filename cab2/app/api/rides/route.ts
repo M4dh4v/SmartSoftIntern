@@ -51,10 +51,10 @@ export async function POST(req: Request) {
     }
 
     // insert…
-    const { error: insertErr } = await supabase.from("rides").insert({
+    const { data: insertData, error: insertErr } = await supabase.from("rides").insert({
       user: uid,
       from, to, distance, price, vehicleType: vtype,
-    });
+    }).select("id").single();
 
     if (insertErr) {
       return NextResponse.json(
@@ -66,6 +66,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       message: "Ride booked successfully",
+      data : insertData
     });
   } catch (err: any) {
     console.error("[/api/rides POST] error:", err);
