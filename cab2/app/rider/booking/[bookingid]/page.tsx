@@ -58,7 +58,7 @@ export default async function BookingPage({ params }: { params: { bookingid: str
 
         {/* Title */}
         <h1 className="text-4xl font-bold text-center text-[#bf360c] mb-10">
-          Booking #{ride.id} Details
+          Booking  Details
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
