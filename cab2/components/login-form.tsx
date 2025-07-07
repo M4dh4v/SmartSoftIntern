@@ -42,7 +42,7 @@ export function LoginForm({
       if (error) throw error;
 
       const role = data.user?.user_metadata.role;
-      if (role === "admin") router.push("/protected");
+      if (role === "admin") router.push("/admin");
       else if (role === "user") router.push("/user/dashboard");
       else if (role === "rider") router.push("/rider/dashboard");
       else router.push("/corrupt-account");

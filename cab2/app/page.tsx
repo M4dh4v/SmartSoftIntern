@@ -14,6 +14,7 @@ export default async function Home() {
 
   const supabase = await createClient()
   const {data,error} = await supabase.auth.getUser()
+  redirect("/auth/login")
   // if (data?.user?.user_metadata.role == "user")
   // {
   //   return redirect("/user/dashboard")

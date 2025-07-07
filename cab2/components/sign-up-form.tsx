@@ -44,7 +44,7 @@ export function SignUpFormAdmin({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
+          emailRedirectTo: `${window.location.origin}/admin`,
           data:{
             role:'admin'
           }

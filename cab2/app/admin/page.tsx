@@ -8,7 +8,10 @@ export default async function Page(){
     riders: await getAllRiders(),
     waiting : await getNonValidRiders()
   }
+  console.log(data)
+
   data= JSON.parse(JSON.stringify(data))
+  // console.log(data)
 
   return(
     <div className="min-h-screen w-full bg-[#fff4e6] text-[#4e342e] flex flex-col">
