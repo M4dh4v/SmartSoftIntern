@@ -1,12 +1,14 @@
 import AdminPage from "@/components/adminPage";
-import { getAllRiders, getAllUsers, getNonValidRiders } from "./actions";
+import { getActiveRides, getAllRiders, getAllUsers, getFinishedRides, getNonValidRiders } from "./actions";
 import NavBar from "@/components/navbar";
 
 export default async function Page(){
   let data = {
     users: await getAllUsers(),
     riders: await getAllRiders(),
-    waiting : await getNonValidRiders()
+    waiting : await getNonValidRiders(),
+    totalRides : await getFinishedRides(),
+    activeRides: await getActiveRides(),
   }
   console.log(data)
 

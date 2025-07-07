@@ -28,7 +28,7 @@ export async function getAllUsers() {
 export async function getActiveRides() {
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase.from('rides').select().eq('active', true);
+    const { data, error } = await supabase.from('rides').select().eq('active', true).eq('finished',false);
     if (error) return { success: false, message: error.message, data: null };
     return { success: true, message: 'Active rides retrieved successfully', data };
   } catch (err: any) {

@@ -5,36 +5,10 @@ import { useState } from "react";
 export default function AdminPage({ data }: { data: any }) {
   const [users, setUsers] = useState(data?.users.data || []);
   const [riders, setRiders] = useState(data?.riders.data || []);
+  const [totalRides] = useState(data?.totalRides.data.length || 0);
+  const [activeRides] = useState(data?.activeRides.data.length || 0);
 
-  console.log(users, riders)
-
-  // Unified REST call
-  const callAdminApi = async (method: string, id: string) => {
-    const res = await fetch('/api/admin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ method, payload: { id } }),
-    });
-    return res.json();
-  };
-
-  const handleDeleteUser = async (id: string) => {
-    const result = await callAdminApi('deleteUser', id);
-    if (result.success) {
-      setUsers(users.filter((u: any) => u.id !== id));
-    } else {
-      alert(`Error deleting user: ${result.message}`);
-    }
-  };
-
-  const handleDeleteRider = async (id: string) => {
-    const result = await callAdminApi('deleteRider', id);
-    if (result.success) {
-      setRiders(riders.filter((r: any) => r.id !== id));
-    } else {
-      alert(`Error deleting rider: ${result.message}`);
-    }
-  };
+  // Unified REST call (no longer shown, as delete buttons removed)
 
   return (
     <main className="flex-1 flex flex-col md:flex-row gap-6 px-6 py-10">
@@ -51,9 +25,22 @@ export default function AdminPage({ data }: { data: any }) {
 
       {/* Main content */}
       <section className="w-full md:w-3/4 flex flex-col gap-6">
+        {/* Welcome */}
         <div className="bg-white rounded-2xl p-6 shadow-md">
           <h1 className="text-2xl font-bold text-[#bf360c]">Welcome Admin 👋</h1>
           <p className="mt-2">Manage users and riders here.</p>
+        </div>
+
+        {/* Summary Box */}
+        <div className="bg-white rounded-2xl p-6 shadow-md flex justify-around">
+          <div className="text-center">
+            <p className="text-sm text-gray-500">Total Rides</p>
+            <p className="text-3xl font-bold">{totalRides}</p>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-gray-500">Active Rides</p>
+            <p className="text-3xl font-bold">{activeRides}</p>
+          </div>
         </div>
 
         {/* Users List */}
@@ -62,17 +49,17 @@ export default function AdminPage({ data }: { data: any }) {
           {users.length > 0 ? (
             <ul className="divide-y divide-gray-200">
               {users.map((user: any) => (
-                <li key={user.id} className="py-2 flex justify-between items-center">
+                <li
+                  key={user.id}
+                  className="py-2 flex justify-between items-center"
+                >
                   <div>
                     <p className="font-medium">{user.name}</p>
                     <p className="text-sm">{user.phoneNumber}</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">
-                      {user.role}
-                    </span>
-                    
-                  </div>
+                  <span className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">
+                    {user.role}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -87,17 +74,17 @@ export default function AdminPage({ data }: { data: any }) {
           {riders.length > 0 ? (
             <ul className="divide-y divide-gray-200">
               {riders.map((r: any) => (
-                <li key={r.id} className="py-2 flex justify-between items-center">
+                <li
+                  key={r.id}
+                  className="py-2 flex justify-between items-center"
+                >
                   <div>
                     <p className="font-medium">{r.name}</p>
                     <p className="text-sm">{r.email}</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">
-                      {r.status ?? "Active"}
-                    </span>
-                  
-                  </div>
+                  <span className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">
+                    {r.status ?? "Active"}
+                  </span>
                 </li>
               ))}
             </ul>

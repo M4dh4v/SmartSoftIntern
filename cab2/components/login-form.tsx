@@ -54,8 +54,8 @@ export function LoginForm({
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#fff4e6]">
-      <div className="w-full max-w-6xl flex shadow-2xl rounded-3xl overflow-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center bg-black">
+      <div className="w-full bg-[#fff4e6] max-w-6xl flex shadow-2xl rounded-3xl overflow-hidden">
         {/* Left Panel with Logo and Features */}
         <div className="w-1/2 bg-[#fff4e6] px-12 py-16 flex flex-col justify-center gap-8">
           <Image
@@ -65,7 +65,9 @@ export function LoginForm({
             height={1500}
             className="mb-4 drop-shadow-xl"
           />
-          <h1 className="text-3xl font-bold text-[#bf360c]">Pin 2 Pin Cab Booking</h1>
+          <h1 className="text-3xl font-bold text-[#bf360c]">
+            Pin 2 Pin Cab Booking
+          </h1>
           <ul className="text-[#4e342e] text-base leading-relaxed">
             <li>🚕 Affordable rides across your city</li>
             <li>📍 Instant location tracking by pincode</li>
@@ -78,7 +80,9 @@ export function LoginForm({
         <div className="w-1/2 bg-zinc-900 text-white p-10 flex items-center justify-center">
           <Card className="bg-zinc-900 text-white border-none w-full rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-3xl font-bold text-center">Login</CardTitle>
+              <CardTitle className="text-3xl font-bold text-center">
+                Login
+              </CardTitle>
               <CardDescription className="text-center text-zinc-400">
                 Enter your email and password to access your account
               </CardDescription>
@@ -114,7 +118,9 @@ export function LoginForm({
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                {error && <p className="text-sm text-red-400 text-center">{error}</p>}
+                {error && (
+                  <p className="text-sm text-red-400 text-center">{error}</p>
+                )}
                 <Button
                   type="submit"
                   className="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold text-lg"
@@ -122,6 +128,22 @@ export function LoginForm({
                 >
                   {isLoading ? "Logging in..." : "Login"}
                 </Button>
+
+                {/* Signup links */}
+                <div className="flex flex-col gap-2 mt-4">
+                  <Link
+                    href="http://localhost:3000/auth/sign-up-user"
+                    className="w-full text-center py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium"
+                  >
+                    Sign up as User
+                  </Link>
+                  <Link
+                    href="http://localhost:3000/auth/sign-up-rider"
+                    className="w-full text-center py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-medium"
+                  >
+                    Sign up as Rider
+                  </Link>
+                </div>
               </form>
             </CardContent>
           </Card>
