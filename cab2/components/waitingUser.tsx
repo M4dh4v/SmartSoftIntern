@@ -3,13 +3,13 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
+import logo from "@/public/logow.png";
 
 export default function WaitingForCabPage({ bookingId }: { bookingId: string }) {
   const router = useRouter();
   const supabase = createClient();
 
-  console.log(bookingId)
-  
   useEffect(() => {
     let intervalId: number | undefined;
 
@@ -32,53 +32,56 @@ export default function WaitingForCabPage({ bookingId }: { bookingId: string }) 
   }, [bookingId, router, supabase]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4">
-      <div className="text-center bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 max-w-md w-full">
-        <div className="mb-6">
-          <svg
-            className="w-20 h-20 text-green-500 mx-auto animate-bounce-in"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#fff4e6] text-gray-900 dark:text-gray-100 p-4">
+      <div className="text-center bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl p-8 max-w-md w-full border border-orange-100">
+        {/* Logo & branding */}
+        <div className="flex justify-center mb-6">
+          <Image
+            src={logo}
+            alt="logo"
+            width={120}
+            height={120}
+            className="drop-shadow-lg"
+          />
         </div>
 
-        <h1 className="text-3xl sm:text-4xl font-bold mb-4">Waiting for Ride!</h1>
-        <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-8">
-          We're finding a driver for your ride
+        <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-[#bf360c]">
+          Waiting for Your Ride!
+        </h1>
+        <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-6">
+          We’re finding the best driver for you
         </p>
 
+        {/* Spinner */}
         <div className="relative w-32 h-32 mx-auto mb-8">
-          <div className="absolute inset-0 border-4 border-t-4 border-gray-200 dark:border-gray-600 border-t-orange-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-0 border-4 border-t-4 border-[#ff7043] border-t-[#bf360c] rounded-full animate-spin-pulse"></div>
         </div>
 
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Please do not close this page. Updates will appear here.
+          Please keep this page open. We’ll update you shortly.
         </p>
       </div>
 
       <style jsx>{`
-        @keyframes bounce-in {
-          0% { transform: scale(0.5); opacity: 0; }
-          70% { transform: scale(1.1); opacity: 1; }
-          100% { transform: scale(1); }
+        @keyframes spin-pulse {
+          0% {
+            transform: rotate(0deg) scale(1);
+            opacity: 1;
+          }
+          50% {
+            transform: rotate(180deg) scale(1.05);
+            opacity: 0.85;
+          }
+          100% {
+            transform: rotate(360deg) scale(1);
+            opacity: 1;
+          }
         }
-        .animate-bounce-in { animation: bounce-in 0.6s ease-out forwards; }
-
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        .animate-spin-pulse {
+          animation: spin-pulse 1.5s linear infinite;
         }
-        .animate-spin { animation: spin 1.5s linear infinite; }
       `}</style>
     </div>
   );
 }
+  

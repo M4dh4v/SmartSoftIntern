@@ -37,7 +37,7 @@ export function FinishRideButton({ rideId }: FinishProps) {
     <button
       onClick={handleFinish}
       disabled={loading}
-      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md disabled:opacity-50"
+      className="px-4 py-2 bg-red-500 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md disabled:opacity-50"
     >
       {loading ? "Finishing..." : "Mark as Finished"}
     </button>
